@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
+
 app.use(express.json());
 
 require("dotenv").config();
@@ -31,6 +33,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.listen(port, () => {
-  console.log(`server is running at http://localhost:${port}`);
-});
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log(`Connected to MongoDB successfully`);
+
+    app.listen(port, () => {
+      console.log(`Server is running at http://localhost:${port}`);
+    });
+  })
+  .catch((error) =>
+    console.error(`Error connecting to MongoDB: ${error.message}`)
+  );
