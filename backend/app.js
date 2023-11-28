@@ -7,6 +7,7 @@ app.use(express.json());
 require("dotenv").config();
 const usersRoutes = require("./routes/users");
 const productsRoutes = require("./routes/products");
+const notesRoutes = require("./routes/notes");
 
 const port = process.env.PORT || 3000;
 // middleware ---> logging
@@ -27,6 +28,8 @@ app.get("/", (req, res) => {
 app.use("/users", usersRoutes);
 
 app.use("/products", productsRoutes);
+
+app.use("/notes", notesRoutes);
 
 app.use((req, res, next) => {
   res.json({ message: `page not found` });
