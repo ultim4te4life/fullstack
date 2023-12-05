@@ -1,0 +1,25 @@
+/* Product.css */
+
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.product-details {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 40px;
+  margin-top: 20px;
+  background-color: rgb(181, 136, 198);
+}
+
+.heading {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.detail {
+  font-size: 16px;
+  margin-bottom: 8px;
+}

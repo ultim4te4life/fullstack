@@ -1,28 +1,35 @@
+// Products.js
 import React, { useState, useEffect } from "react";
 import "./Products.css";
 import { Header } from "../../components";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { CreateProductModal } from "./CreateProductModal";
 
 export const Products = () => {
-  const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+
+  const [products, setProducts] = useState([]);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   useEffect(() => {
     const getProducts = async () => {
       const response = await axios.get("http://localhost:8080/products");
-      const data = response.data;
+      const data = await response.data;
       setProducts(data);
     };
 
     getProducts();
   }, []);
 
-  console.log(products);
-
   return (
     <div>
       <Header />
+      <button variant="outlined" onClick={handleOpen}>
+        Create Product
+      </button>
       <div className="products-container">
         {products.map((product) => (
           <div
@@ -37,6 +44,7 @@ export const Products = () => {
           </div>
         ))}
       </div>
+      <CreateProductModal open={open} handleClose={handleClose} />
     </div>
   );
 };
