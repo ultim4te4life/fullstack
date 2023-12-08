@@ -27,7 +27,7 @@ export const Products = () => {
   return (
     <div>
       <Header />
-      <button variant="outlined" onClick={handleOpen}>
+      <button className="button-styled" variant="outlined" onClick={handleOpen}>
         Create Product
       </button>
       <div className="products-container">

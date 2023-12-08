@@ -50,7 +50,7 @@ export const Product = () => {
           <button
             style={{
               padding: "10px",
-              backgroundColor: "purple",
+              backgroundColor: "skyblue",
               color: "white",
               border: "none",
               borderRadius: "4px",
@@ -65,7 +65,7 @@ export const Product = () => {
           <button
             style={{
               padding: "10px",
-              backgroundColor: "purple",
+              backgroundColor: "skyblue",
               color: "white",
               border: "none",
               borderRadius: "4px",

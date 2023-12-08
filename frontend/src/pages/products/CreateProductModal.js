@@ -4,10 +4,15 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import * as Yup from "yup";
 
-export const CreateProductModal = (props) => {
-  const { open, handleClose } = props;
-
+export const CreateProductModal = ({ open, handleClose }) => {
   const [newProduct, setNewProduct] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+  });
+
+  const [errors, setErrors] = useState({
     name: "",
     description: "",
     price: "",
@@ -20,6 +25,13 @@ export const CreateProductModal = (props) => {
     price: Yup.number().required("Price is required"),
     category: Yup.string().required("Category is required"),
   });
+
+  const handleInputChange = (field, value) => {
+    setNewProduct((prevProduct) => ({
+      ...prevProduct,
+      [field]: value,
+    }));
+  };
 
   const handleCreateNewProduct = async () => {
     try {
@@ -35,8 +47,13 @@ export const CreateProductModal = (props) => {
       handleClose();
       window.location.reload();
     } catch (error) {
-      if (error.name === "ValidationError") {
-        console.error("Validation error:", error.errors);
+      if (error instanceof Yup.ValidationError) {
+        // Extract individual validation errors
+        const newErrors = {};
+        error.inner.forEach((validationError) => {
+          newErrors[validationError.path] = validationError.message;
+        });
+        setErrors(newErrors);
       } else {
         console.error("Error creating product:", error);
       }
@@ -49,81 +66,71 @@ export const CreateProductModal = (props) => {
   };
 
   return (
-    <div>
-      <Modal open={open} handleClose={handleClose}>
-        <Box>
-          <Typography variant="h6">Create a New Product</Typography>
-          <form style={formStyle}>
-            <TextField
-              label="Name"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              value={newProduct.name}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, name: e.target.value })
-              }
-              error={!!validationSchema.fields.name?.errors?.[0]}
-              helperText={validationSchema.fields.name?.errors?.[0]}
-            />
-            <TextField
-              label="Description"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              multiline
-              rows={4}
-              value={newProduct.description}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, description: e.target.value })
-              }
-              error={!!validationSchema.fields.description?.errors?.[0]}
-              helperText={validationSchema.fields.description?.errors?.[0]}
-            />
-            <TextField
-              label="Price"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              type="number"
-              value={newProduct.price}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, price: e.target.value })
-              }
-              error={!!validationSchema.fields.price?.errors?.[0]}
-              helperText={validationSchema.fields.price?.errors?.[0]}
-            />
-            <TextField
-              label="Category"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              value={newProduct.category}
-              onChange={(e) =>
-                setNewProduct({ ...newProduct, category: e.target.value })
-              }
-              error={!!validationSchema.fields.category?.errors?.[0]}
-              helperText={validationSchema.fields.category?.errors?.[0]}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleCreateNewProduct}
-              sx={{ marginTop: 2 }}
-            >
-              Create Product
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleClose}
-              sx={{ marginTop: 2 }}
-            >
-              Cancel
-            </Button>
-          </form>
-        </Box>
-      </Modal>
-    </div>
+    <Modal open={open} handleClose={handleClose}>
+      <Box>
+        <Typography variant="h6">Create a New Product</Typography>
+        <form style={formStyle}>
+          <TextField
+            label="Name"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={newProduct.name}
+            onChange={(e) => handleInputChange("name", e.target.value)}
+            error={!!errors.name}
+            helperText={errors.name}
+          />
+          <TextField
+            label="Description"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            multiline
+            rows={4}
+            value={newProduct.description}
+            onChange={(e) => handleInputChange("description", e.target.value)}
+            error={!!errors.description}
+            helperText={errors.description}
+          />
+          <TextField
+            label="Price"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            type="number"
+            value={newProduct.price}
+            onChange={(e) => handleInputChange("price", e.target.value)}
+            error={!!errors.price}
+            helperText={errors.price}
+          />
+          <TextField
+            label="Category"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+            value={newProduct.category}
+            onChange={(e) => handleInputChange("category", e.target.value)}
+            error={!!errors.category}
+            helperText={errors.category}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCreateNewProduct}
+            sx={{ marginTop: 2 }}
+          >
+            Create Product
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleClose}
+            sx={{ marginTop: 2 }}
+          >
+            Cancel
+          </Button>
+        </form>
+      </Box>
+    </Modal>
   );
 };

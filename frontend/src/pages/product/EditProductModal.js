@@ -1,18 +1,34 @@
-// EditProductModal.js
 import React, { useState, useEffect } from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
+import * as yup from "yup";
+
+const validationSchema = yup.object().shape({
+  name: yup.string().required("Name is required"),
+  description: yup.string().required("Description is required"),
+  price: yup
+    .number()
+    .required("Price is required")
+    .positive("Price must be a positive number"),
+  category: yup.string().required("Category is required"),
+});
 
 export const EditProductModal = ({ open, handleClose, product, id }) => {
-  console.log(product);
   const [editedProduct, setEditedProduct] = useState({
     name: product.name,
     description: product.description,
     price: product.price,
     category: product.category,
+  });
+
+  const [errors, setErrors] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
   });
 
   useEffect(() => {
@@ -34,13 +50,23 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
 
   const handleEditProduct = async () => {
     try {
+      await validationSchema.validate(editedProduct, { abortEarly: false });
       console.log("Before axios request", editedProduct);
       await axios.put(`http://localhost:8080/products/${id}`, editedProduct);
       console.log("Product updated successfully!");
       handleClose();
       window.location.reload();
     } catch (error) {
-      console.error("Error updating product:", error.message);
+      if (error.name === "ValidationError") {
+        // Extract and set individual validation errors
+        const newErrors = {};
+        error.inner.forEach((validationError) => {
+          newErrors[validationError.path] = validationError.message;
+        });
+        setErrors(newErrors);
+      } else {
+        console.error("Error updating product:", error.message);
+      }
     }
   };
 
@@ -57,6 +83,8 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
             name="name"
             value={editedProduct.name}
             onChange={handleInputChange}
+            error={!!errors.name}
+            helperText={errors.name}
           />
           <TextField
             label="Description"
@@ -68,6 +96,8 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
             onChange={handleInputChange}
             multiline
             rows={4}
+            error={!!errors.description}
+            helperText={errors.description}
           />
           <TextField
             label="Price"
@@ -77,6 +107,8 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
             name="price"
             value={editedProduct.price}
             onChange={handleInputChange}
+            error={!!errors.price}
+            helperText={errors.price}
           />
           <TextField
             label="Category"
@@ -86,6 +118,8 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
             name="category"
             value={editedProduct.category}
             onChange={handleInputChange}
+            error={!!errors.category}
+            helperText={errors.category}
           />
           <Button
             variant="contained"
