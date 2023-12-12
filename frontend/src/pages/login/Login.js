@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Button, TextField, Typography, Container } from "@mui/material";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Header } from "../../components";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ClipLoader } from "react-spinners";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -15,14 +19,44 @@ export const Login = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
-    // You can handle the login logic here
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data) => {
+    try {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      const response = await axios.post(
+        "http://localhost:8080/users/signin",
+        data
+      );
+
+      const { token, user } = response.data;
+
+      localStorage.setItem("token", token);
+
+      console.log("Sign-in successful", user);
+
+      toast.success("Sign-in successful", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+
+      reset();
+    } catch (error) {
+      console.error("Login failed", error.response.data);
+
+      toast.error(error.response.data, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -54,8 +88,20 @@ export const Login = () => {
               error={!!errors.password}
               helperText={errors.password?.message}
             />
-            <Button type="submit" variant="contained" color="primary" fullWidth>
-              Login
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              className="button"
+              disabled={loading}
+              aria-busy={loading}
+            >
+              {loading ? (
+                <ClipLoader color={"#ffffff"} loading={true} size={15} />
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
           <Typography variant="body2" style={{ marginTop: 16 }}>

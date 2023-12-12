@@ -1,5 +1,6 @@
-import { Home, Product, Products, Login, SignUp } from "./pages";
+import { Home, Product, Products, Login } from "./pages";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import SignUpPage from "./pages/signup/SignUp";
 
 export const App = () => {
   return (
@@ -9,7 +10,7 @@ export const App = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<Product />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signup" element={<SignUpPage />} />
       </Routes>
     </BrowserRouter>
   );

@@ -11,21 +11,21 @@ const createToken = (id) => {
 };
 
 const signUpUser = async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+  const { email, password, firstname, lastname, age } = req.body;
+  if (!email || !password || !firstname || !lastname || !age) {
     res.status(400).send(`Invalid email or password`);
     return;
   }
 
   if (!validator.isEmail(email)) {
-    res.status(400).send(`please enter a valid email`);
+    res.status(400).send(`Please enter a valid email`);
     return;
   }
 
   if (!validator.isStrongPassword(password)) {
     res.status(400).send(
-      `please enter a at least one lowercase, one number, 
-        one symbol, one uppercase, min 8 character length password`
+      `Please enter a password with at least one lowercase, one number, 
+        one symbol, one uppercase, and a minimum length of 8 characters`
     );
     return;
   }
@@ -40,6 +40,9 @@ const signUpUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = await User.create({
+      firstname,
+      lastname,
+      age,
       email,
       password: hashedPassword,
     });
