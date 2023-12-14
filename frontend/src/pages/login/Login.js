@@ -37,9 +37,9 @@ export const Login = () => {
         data
       );
 
-      const { token, user } = response.data;
+      const user = response.data;
 
-      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
 
       console.log("Sign-in successful", user);
 

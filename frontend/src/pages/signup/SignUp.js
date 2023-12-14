@@ -60,11 +60,9 @@ const SignUpPage = () => {
         password: data.password,
       });
 
-      const { token, newUser } = response.data;
+      const user = response.data;
 
-      localStorage.setItem("token", token);
-
-      console.log("Signup successful", newUser);
+      localStorage.setItem("user", JSON.stringify(user));
 
       toast.success("Signup successful", {
         position: toast.POSITION.TOP_CENTER,
