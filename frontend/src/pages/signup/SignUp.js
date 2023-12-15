@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { css } from "@emotion/react";
 import { ClipLoader } from "react-spinners";
+import { useUserContext } from "../../context/UserContext";
 
 const schema = yup.object().shape({
   firstName: yup.string().required("First Name is required"),
@@ -43,7 +44,7 @@ const SignUpPage = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  const { signUp } = useUserContext();
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
@@ -63,7 +64,7 @@ const SignUpPage = () => {
       const user = response.data;
 
       localStorage.setItem("user", JSON.stringify(user));
-
+      signUp(data);
       toast.success("Signup successful", {
         position: toast.POSITION.TOP_CENTER,
       });

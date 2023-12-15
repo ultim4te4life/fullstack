@@ -9,6 +9,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClipLoader } from "react-spinners";
+import { useUserContext } from "../../context/UserContext";
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -24,7 +25,7 @@ export const Login = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  const { signIn } = useUserContext();
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
@@ -40,6 +41,7 @@ export const Login = () => {
       const user = response.data;
 
       localStorage.setItem("user", JSON.stringify(user));
+      signIn(data);
 
       console.log("Sign-in successful", user);
 

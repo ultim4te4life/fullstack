@@ -5,19 +5,34 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
 
+  const [userContextLoading, setUserContextLoading] = useState(true);
+
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
       setCurrentUser(JSON.parse(user));
     }
+
+    setUserContextLoading(false);
   }, []);
 
-  const logout = () => {
-    console.log("logged out");
+  const signUp = (userInfo) => {
+    setCurrentUser(userInfo);
+  };
+
+  const signIn = (userInfo) => {
+    setCurrentUser(userInfo);
+  };
+
+  const signOut = () => {
+    localStorage.removeItem("user");
+    setCurrentUser(null);
   };
 
   return (
-    <UserContext.Provider value={{ currentUser, logout }}>
+    <UserContext.Provider
+      value={{ currentUser, signUp, signIn, signOut, userContextLoading }}
+    >
       {children}
     </UserContext.Provider>
   );
@@ -25,6 +40,5 @@ export const UserContextProvider = ({ children }) => {
 
 export const useUserContext = () => {
   const context = useContext(UserContext);
-
   return context;
 };
