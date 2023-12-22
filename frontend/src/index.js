@@ -5,12 +5,15 @@ import { App } from "./App";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContextProvider } from "./context/UserContext";
+import { ProductContextProvider } from "./context/ProductContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <UserContextProvider>
-      <App />
+      <ProductContextProvider>
+        <App />
+      </ProductContextProvider>
       <ToastContainer />
     </UserContextProvider>
   </React.StrictMode>

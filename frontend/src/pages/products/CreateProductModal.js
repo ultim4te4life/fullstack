@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Modal } from "../../components";
 import { Box, Button, TextField, Typography } from "@mui/material";
-import axios from "axios";
 import * as Yup from "yup";
+import { useProductContext } from "../../context/ProductContext";
 
 export const CreateProductModal = ({ open, handleClose }) => {
+  const { CREATE_PRODUCT } = useProductContext();
+
   const [newProduct, setNewProduct] = useState({
     name: "",
     description: "",
@@ -36,7 +38,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
   const handleCreateNewProduct = async () => {
     try {
       await validationSchema.validate(newProduct, { abortEarly: false });
-      await axios.post("http://localhost:8080/products", newProduct);
+      await CREATE_PRODUCT(newProduct);
 
       setNewProduct({
         name: "",
@@ -45,10 +47,8 @@ export const CreateProductModal = ({ open, handleClose }) => {
         category: "",
       });
       handleClose();
-      window.location.reload();
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
-        // Extract individual validation errors
         const newErrors = {};
         error.inner.forEach((validationError) => {
           newErrors[validationError.path] = validationError.message;

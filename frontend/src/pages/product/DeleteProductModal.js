@@ -3,16 +3,17 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { useProductContext } from "../../context/ProductContext";
+import { useUserContext } from "../../context/UserContext";
 
 export const DeleteProductModal = ({ open, handleClose, id }) => {
   const navigate = useNavigate();
-  console.log(id);
+  const { DELETE_PRODUCT } = useProductContext();
+
   const handleDeleteProduct = async () => {
     try {
-      // Make an HTTP DELETE request to your server endpoint
-      await axios.delete(`http://localhost:8080/products/${id}`);
-      console.log("Product deleted successfully!");
+      DELETE_PRODUCT(id);
 
       handleClose();
       navigate("/products");
@@ -20,7 +21,6 @@ export const DeleteProductModal = ({ open, handleClose, id }) => {
       console.error("Error deleting product:", error.message);
     }
   };
-
   return (
     <Modal open={open} onClose={handleClose}>
       <Box sx={modalStyle}>

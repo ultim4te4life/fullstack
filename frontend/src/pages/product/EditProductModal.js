@@ -3,8 +3,8 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import axios from "axios";
 import * as yup from "yup";
+import { useProductContext } from "../../context/ProductContext";
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -17,6 +17,8 @@ const validationSchema = yup.object().shape({
 });
 
 export const EditProductModal = ({ open, handleClose, product, id }) => {
+  const { UPDATE_PRODUCT } = useProductContext();
+
   const [editedProduct, setEditedProduct] = useState({
     name: product.name,
     description: product.description,
@@ -51,14 +53,11 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
   const handleEditProduct = async () => {
     try {
       await validationSchema.validate(editedProduct, { abortEarly: false });
-      console.log("Before axios request", editedProduct);
-      await axios.put(`http://localhost:8080/products/${id}`, editedProduct);
+      await UPDATE_PRODUCT({ ...editedProduct, _id: id });
       console.log("Product updated successfully!");
       handleClose();
-      window.location.reload();
     } catch (error) {
       if (error.name === "ValidationError") {
-        // Extract and set individual validation errors
         const newErrors = {};
         error.inner.forEach((validationError) => {
           newErrors[validationError.path] = validationError.message;

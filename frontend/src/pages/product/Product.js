@@ -1,40 +1,40 @@
 // Product.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import { EditProductModal } from "./EditProductModal";
 import { Header } from "../../components";
-import "./Product.css"; // Import the external CSS file
+import "./Product.css";
 import { DeleteProductModal } from "./DeleteProductModal";
+import { useProductContext } from "../../context/ProductContext";
 
 export const Product = () => {
+  const { id } = useParams();
+  const { products, productsContextLoading, fetchProducts } =
+    useProductContext();
   const [product, setProduct] = useState({});
-  // state for edit modal
   const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  useEffect(() => {
+    if (!productsContextLoading && products.length === 0) {
+      fetchProducts();
+    } else {
+      const foundProduct = products.find((p) => p._id === id);
+      if (foundProduct) {
+        setProduct(foundProduct);
+      }
+    }
+  }, [id, products, productsContextLoading, fetchProducts]);
+
   const handleOpenEdit = () => setOpenEdit(true);
   const handleCloseEdit = () => setOpenEdit(false);
-  // state for delete modal
-  const [openDelete, setOpenDelete] = useState(false);
+
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
 
-  const { id } = useParams();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/products/${id}`
-        );
-        const data = response.data;
-        setProduct(data);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-      }
-    };
-
-    fetchProduct();
-  }, [id]);
+  if (productsContextLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>

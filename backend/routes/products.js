@@ -9,6 +9,10 @@ const {
   deleteProduct,
 } = require("../controllers/product");
 
+const auth = require("../middleware/auth");
+
+router.use(auth);
+
 // GET /products - Get all products
 router.get("/", getAllProduct);
 
