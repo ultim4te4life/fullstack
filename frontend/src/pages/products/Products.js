@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Products.css";
 
 import { Header } from "../../components";
@@ -23,9 +23,15 @@ export const Products = () => {
   return (
     <div>
       <Header />
-      <Button className="button-styled" variant="outlined" onClick={handleOpen}>
-        Create Product
-      </Button>
+      <div className="products-header">
+        <Button
+          className="button-styled"
+          variant="outlined"
+          onClick={handleOpen}
+        >
+          Create Product
+        </Button>
+      </div>
       <div className="products-container">
         {products.map((product) => (
           <div

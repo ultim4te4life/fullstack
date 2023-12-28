@@ -47,34 +47,11 @@ export const Product = () => {
           <p className="detail">Description: {product.description}</p>
           <p className="detail">Price: ${product.price}</p>
           <p className="detail">Category: {product.category}</p>
-          <button
-            style={{
-              padding: "10px",
-              backgroundColor: "skyblue",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-            variant="outlined"
-            onClick={handleOpenEdit}
-          >
-            Edit product
+          <button className="action-button" onClick={handleOpenEdit}>
+            Edit Product
           </button>
-
-          <button
-            style={{
-              padding: "10px",
-              backgroundColor: "skyblue",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-            }}
-            variant="outlined"
-            onClick={handleOpenDelete}
-          >
-            Delete product
+          <button className="action-button" onClick={handleOpenDelete}>
+            Delete Product
           </button>
         </div>
         <EditProductModal

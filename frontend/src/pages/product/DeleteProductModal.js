@@ -2,10 +2,8 @@ import React from "react";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useProductContext } from "../../context/ProductContext";
-import { useUserContext } from "../../context/UserContext";
 
 export const DeleteProductModal = ({ open, handleClose, id }) => {
   const navigate = useNavigate();
