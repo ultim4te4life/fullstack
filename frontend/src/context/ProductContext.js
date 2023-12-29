@@ -26,6 +26,7 @@ export const ProductContextProvider = ({ children }) => {
           setProductsContextLoading(false);
         } catch (error) {
           console.log(error);
+          setProductsContextLoading(false);
         }
       };
       if (currentUser) {
