@@ -1,0 +1,53 @@
+/* Home.css */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0; /* Set your background color */
+
+  /* Add 3D effect to the container */
+  perspective: 1000px;
+}
+
+.main-content {
+  text-align: center;
+  padding: 50px;
+  background-color: #fff; /* Set your content background color */
+  transform: rotateX(20deg); /* Apply a 3D rotation to create depth */
+  transition: transform 0.5s ease-in-out;
+
+  /* Add box shadow for a lifted effect */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.main-content:hover {
+  transform: rotateX(0deg); /* Reset the rotation on hover */
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+  color: #333; /* Set your text color */
+}
+
+p {
+  font-size: 1.5em;
+  color: #666; /* Set your text color */
+}
+
+.explore-button {
+  background-color: #007bff; /* Set your button color */
+  color: #fff; /* Set your button text color */
+  padding: 10px 20px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3; /* Set your button hover color */
+  }
+}
