@@ -10,31 +10,27 @@ export const ProductContextProvider = ({ children }) => {
   const { currentUser, userContextLoading } = useUserContext();
 
   useEffect(() => {
-    if (!userContextLoading) {
-      const fetchProducts = async () => {
-        try {
-          const response = await axios.get(
-            "https://fullstack-backend-if5q.onrender.com/products",
-            {
-              headers: {
-                Authorization: `Bearer ${currentUser.token}`,
-              },
-            }
-          );
-          const data = await response.data;
-          setProducts(data);
-          setProductsContextLoading(false);
-        } catch (error) {
-          console.log(error);
-          setProductsContextLoading(false);
-        }
-      };
-      if (currentUser) {
-        fetchProducts();
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(
+          "https://fullstack-backend-if5q.onrender.com/products",
+          {
+            headers: {
+              Authorization: `Bearer ${currentUser.token}`,
+            },
+          }
+        );
+        const data = await response.data;
+        setProducts(data);
+        setProductsContextLoading(false);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setProductsContextLoading(false);
       }
-      return () => fetchProducts();
-    } else {
-      setProducts([]);
+    };
+
+    if (!userContextLoading && currentUser) {
+      fetchProducts();
     }
   }, [currentUser, userContextLoading]);
 
