@@ -13,11 +13,14 @@ export const ProductContextProvider = ({ children }) => {
     if (!userContextLoading) {
       const fetchProducts = async () => {
         try {
-          const response = await axios.get("http://localhost:8080/products", {
-            headers: {
-              Authorization: `Bearer ${currentUser.token}`,
-            },
-          });
+          const response = await axios.get(
+            "https://fullstack-backend-if5q.onrender.com/products",
+            {
+              headers: {
+                Authorization: `Bearer ${currentUser.token}`,
+              },
+            }
+          );
           const data = await response.data;
           setProducts(data);
           setProductsContextLoading(false);
@@ -42,7 +45,7 @@ export const ProductContextProvider = ({ children }) => {
       }
 
       const response = await axios.post(
-        "http://localhost:8080/products",
+        "https://fullstack-backend-if5q.onrender.com/products",
         newProduct,
         {
           headers: {
@@ -66,7 +69,7 @@ export const ProductContextProvider = ({ children }) => {
       }
 
       const response = await axios.put(
-        `http://localhost:8080/products/${updatedProduct._id}`,
+        `https://fullstack-backend-if5q.onrender.com/products/${updatedProduct._id}`,
         updatedProduct,
         {
           headers: {
@@ -98,11 +101,14 @@ export const ProductContextProvider = ({ children }) => {
         return;
       }
 
-      await axios.delete(`http://localhost:8080/products/${productId}`, {
-        headers: {
-          Authorization: `Bearer ${currentUser.token}`,
-        },
-      });
+      await axios.delete(
+        `https://fullstack-backend-if5q.onrender.com/products/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+          },
+        }
+      );
 
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product._id !== productId)

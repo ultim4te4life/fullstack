@@ -53,13 +53,16 @@ const SignUpPage = () => {
       setLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
-      const response = await axios.post("http://localhost:8080/users/signup", {
-        firstname: data.firstName,
-        lastname: data.lastName,
-        age: data.age,
-        email: data.email,
-        password: data.password,
-      });
+      const response = await axios.post(
+        "https://fullstack-backend-if5q.onrender.com/users/signup",
+        {
+          firstname: data.firstName,
+          lastname: data.lastName,
+          age: data.age,
+          email: data.email,
+          password: data.password,
+        }
+      );
 
       const user = response.data;
 
