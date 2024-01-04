@@ -8,7 +8,7 @@ export const ProductContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
   const [productsContextLoading, setProductsContextLoading] = useState(true);
   const { currentUser, userContextLoading } = useUserContext();
-
+  const token = currentUser?.token;
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -16,7 +16,7 @@ export const ProductContextProvider = ({ children }) => {
           "https://fullstack-backend-if5q.onrender.com/products",
           {
             headers: {
-              Authorization: `Bearer ${currentUser.token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -32,7 +32,7 @@ export const ProductContextProvider = ({ children }) => {
     if (!userContextLoading && currentUser) {
       fetchProducts();
     }
-  }, [currentUser, userContextLoading]);
+  }, [currentUser, userContextLoading, token]);
 
   const CREATE_PRODUCT = async (newProduct) => {
     try {
