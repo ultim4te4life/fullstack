@@ -43,6 +43,7 @@ export const Products = () => {
             <p>Description: {product.description}</p>
             <p>Price: ${product.price}</p>
             <p>Category: {product.category}</p>
+            <p>Visibility: {product.visibility}</p>
           </div>
         ))}
       </div>

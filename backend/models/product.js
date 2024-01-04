@@ -18,9 +18,17 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Product category is required"],
     },
-    userId: { type: String, required: [true, "Product userId is required"] },
+    userId: {
+      type: String,
+      required: [true, "Product userId is required"],
+    },
+    visibility: {
+      type: String,
+      enum: ["public", "private"],
+      default: "public",
+      required: [true, "Product visibility is required"],
+    },
   },
-
   { timestamps: true }
 );
 

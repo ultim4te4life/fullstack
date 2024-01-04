@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Modal } from "../../components";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import * as Yup from "yup";
 import { useProductContext } from "../../context/ProductContext";
 
@@ -12,6 +19,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
     description: "",
     price: "",
     category: "",
+    visibility: "public", // Set a default visibility value
   });
 
   const [errors, setErrors] = useState({
@@ -45,6 +53,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
         description: "",
         price: "",
         category: "",
+        visibility: "public",
       });
       handleClose();
     } catch (error) {
@@ -113,6 +122,16 @@ export const CreateProductModal = ({ open, handleClose }) => {
             error={!!errors.category}
             helperText={errors.category}
           />
+          <Select
+            label="Visibility"
+            variant="outlined"
+            margin="normal"
+            value={newProduct.visibility}
+            onChange={(e) => handleInputChange("visibility", e.target.value)}
+          >
+            <MenuItem value="public">Public</MenuItem>
+            <MenuItem value="private">Private</MenuItem>
+          </Select>
           <Button
             variant="contained"
             color="primary"

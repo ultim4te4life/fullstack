@@ -47,6 +47,7 @@ export const Product = () => {
           <p className="detail">Description: {product.description}</p>
           <p className="detail">Price: ${product.price}</p>
           <p className="detail">Category: {product.category}</p>
+          <p className="detail">Visibility: {product.visibility}</p>
           <button className="action-button" onClick={handleOpenEdit}>
             Edit Product
           </button>
