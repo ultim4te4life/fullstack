@@ -15,7 +15,7 @@ export const Header = () => {
     <header className="header">
       <div className="logo">
         <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3eX-D-RNGANk5gT8Qw0iJ8M_6AGoIv_RjtQ&usqp=CAU"
+          src="https://media1.giphy.com/media/IxKAzrKSGdOxGi4dlj/giphy.gif?cid=ecf05e479et91ishqeeiubgf5khgzfd8a3xcyivz6033d9dl&ep=v1_gifs_related&rid=giphy.gif&ct=g"
           alt="Your Logo"
         />
       </div>

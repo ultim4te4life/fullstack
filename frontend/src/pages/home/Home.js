@@ -1,16 +1,19 @@
+// Home.js
 import React from "react";
 import "./Home.css";
 import { Header } from "../../components";
 
 export const Home = () => {
   return (
-    <div className="home-container">
+    <div>
+      {" "}
       <Header />
-
-      <div className="main-content">
-        <h1>Welcome to Your Website</h1>
-        <p>Explore the world of possibilities</p>
-        <button className="explore-button">Explore Now</button>
+      <div className="home-container">
+        <div className="main-content">
+          <h1>Welcome to the Cybernetic Hub</h1>
+          <p>Unleash the power of the future</p>
+          <button className="explore-button">Explore Now</button>
+        </div>
       </div>
     </div>
   );

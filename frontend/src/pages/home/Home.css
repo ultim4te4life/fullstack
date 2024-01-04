@@ -5,49 +5,99 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #f0f0f0; /* Set your background color */
-
-  /* Add 3D effect to the container */
-  perspective: 1000px;
+  background: url("https://plus.unsplash.com/premium_photo-1661963212517-830bbb7d76fc?q=80&w=3372&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+    center/cover; /* Set your cyberpunk background image */
+  color: #fff;
 }
 
 .main-content {
   text-align: center;
-  padding: 50px;
-  background-color: #fff; /* Set your content background color */
-  transform: rotateX(20deg); /* Apply a 3D rotation to create depth */
-  transition: transform 0.5s ease-in-out;
-
-  /* Add box shadow for a lifted effect */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-.main-content:hover {
-  transform: rotateX(0deg); /* Reset the rotation on hover */
 }
 
 h1 {
   font-size: 3em;
   margin-bottom: 10px;
-  color: #333; /* Set your text color */
+  font-family: "Orbitron", sans-serif; /* Set a futuristic font, you can use Google Fonts */
 }
 
 p {
   font-size: 1.5em;
-  color: #666; /* Set your text color */
+  margin-bottom: 20px;
 }
 
 .explore-button {
-  background-color: #007bff; /* Set your button color */
-  color: #fff; /* Set your button text color */
-  padding: 10px 20px;
-  font-size: 1.2em;
+  width: 220px;
+  height: 50px;
   border: none;
-  border-radius: 5px;
+  outline: none;
+  color: #fff;
+  background: #111;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  position: relative;
+  z-index: 0;
+  border-radius: 10px;
+}
 
-  &:hover {
-    background-color: #0056b3; /* Set your button hover color */
+.explore-button:before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.explore-button:active {
+  color: #000;
+}
+
+.explore-button:active:after {
+  background: transparent;
+}
+
+.explore-button:hover:before {
+  opacity: 1;
+}
+
+.explore-button:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
   }
 }

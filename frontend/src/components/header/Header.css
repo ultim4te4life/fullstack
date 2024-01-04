@@ -1,6 +1,6 @@
 /* Header.css */
 .header {
-  background-color: #2196f3;
+  background-color: black;
   padding: 20px;
   display: flex;
   justify-content: space-between;
@@ -14,7 +14,7 @@
 }
 
 .logo img {
-  width: 40px;
+  width: 150px;
   margin-right: 10px;
 }
 
