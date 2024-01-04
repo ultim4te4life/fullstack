@@ -19,7 +19,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
     description: "",
     price: "",
     category: "",
-    visibility: "public", // Set a default visibility value
+    visibility: "public",
   });
 
   const [errors, setErrors] = useState({
