@@ -3,9 +3,16 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Header.css";
 import { useUserContext } from "../../context/UserContext";
+import { useProductContext } from "../../context/ProductContext";
 
 export const Header = () => {
   const { currentUser, signOut, userContextLoading } = useUserContext();
+  const { setProducts } = useProductContext();
+
+  const handleLogout = () => {
+    signOut();
+    setProducts([]);
+  };
 
   if (userContextLoading) {
     return <div>Loading...</div>;
@@ -32,7 +39,7 @@ export const Header = () => {
               Welcome,{" "}
               {currentUser.user ? currentUser.user.email : currentUser.email}
             </span>
-            <button className="sign-out-button" onClick={signOut}>
+            <button className="sign-out-button" onClick={handleLogout}>
               Sign Out
             </button>
           </div>

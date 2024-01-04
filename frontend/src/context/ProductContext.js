@@ -120,6 +120,7 @@ export const ProductContextProvider = ({ children }) => {
       value={{
         products,
         productsContextLoading,
+        setProducts,
         CREATE_PRODUCT,
         UPDATE_PRODUCT,
         DELETE_PRODUCT,

@@ -2,7 +2,8 @@ const Product = require("../../models/product");
 
 const getAllProduct = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const userId = req.user._id;
+    const products = await Product.find({ userId });
 
     if (!products) {
       return res.status(404).json({ message: "No products found" });
