@@ -3,7 +3,9 @@ const Product = require("../../models/product");
 const getAllProduct = async (req, res) => {
   try {
     const userId = req.user._id;
-    const products = await Product.find({ userId });
+    const products = await Product.find({
+      $or: [{ userId }, { visibility: "public" }],
+    });
 
     if (!products) {
       return res.status(404).json({ message: "No products found" });

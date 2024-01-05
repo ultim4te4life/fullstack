@@ -43,6 +43,7 @@ export const ProductContextProvider = ({ children }) => {
 
       const response = await axios.post(
         "https://fullstack-backend-if5q.onrender.com/products",
+
         newProduct,
         {
           headers: {
@@ -67,6 +68,7 @@ export const ProductContextProvider = ({ children }) => {
 
       const response = await axios.put(
         `https://fullstack-backend-if5q.onrender.com/products/${updatedProduct._id}`,
+
         updatedProduct,
         {
           headers: {
@@ -100,6 +102,7 @@ export const ProductContextProvider = ({ children }) => {
 
       await axios.delete(
         `https://fullstack-backend-if5q.onrender.com/products/${productId}`,
+
         {
           headers: {
             Authorization: `Bearer ${currentUser.token}`,

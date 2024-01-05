@@ -11,7 +11,7 @@ const createnewProduct = async (req, res) => {
       !description ||
       !category ||
       !userId ||
-      visibility === undefined
+      !visibility
     ) {
       return res.status(400).json({
         message: "All fields, including visibility, are required",
