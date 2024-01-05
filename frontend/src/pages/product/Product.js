@@ -47,7 +47,20 @@ export const Product = () => {
           <p className="detail">Description: {product.description}</p>
           <p className="detail">Price: ${product.price}</p>
           <p className="detail">Category: {product.category}</p>
-          <p className="detail">Visibility: {product.visibility}</p>
+          <p
+            style={{
+              backgroundColor:
+                product.visibility === "public" ? "green" : "red",
+              padding: "2px 5px",
+              borderRadius: "4px",
+              color: "white",
+            }}
+            className="detail"
+          >
+            Visibility: {product.visibility}
+          </p>
+          <p classname="detail">Added By: {product.userEmail}</p>{" "}
+          {/* Add this line */}
           <button className="action-button" onClick={handleOpenEdit}>
             Edit Product
           </button>

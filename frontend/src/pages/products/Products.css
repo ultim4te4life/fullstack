@@ -55,3 +55,14 @@
   align-items: center;
   margin-top: 50px;
 }
+
+.product-card {
+}
+
+.visibility-public {
+  color: green;
+}
+
+.visibility-private {
+  color: red;
+}

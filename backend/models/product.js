@@ -25,8 +25,11 @@ const productSchema = new mongoose.Schema(
     visibility: {
       type: String,
       enum: ["public", "private"],
-      default: "public",
       required: [true, "Product visibility is required"],
+    },
+    userEmail: {
+      type: String,
+      required: [true, "User email is required"],
     },
   },
   { timestamps: true }

@@ -8,12 +8,17 @@ export const UserContextProvider = ({ children }) => {
   const [userContextLoading, setUserContextLoading] = useState(true);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setCurrentUser(JSON.parse(user));
+    try {
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+        setUserContextLoading(false);
+        return;
+      }
+      setCurrentUser(user);
+      setUserContextLoading(false);
+    } catch (e) {
+      console.error(e);
     }
-
-    setUserContextLoading(false);
   }, []);
 
   const signUp = (userInfo) => {

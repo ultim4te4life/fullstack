@@ -10,9 +10,11 @@ import {
 } from "@mui/material";
 import * as Yup from "yup";
 import { useProductContext } from "../../context/ProductContext";
+import { useUserContext } from "../../context/UserContext";
 
 export const CreateProductModal = ({ open, handleClose }) => {
   const { CREATE_PRODUCT } = useProductContext();
+  const { currentUser } = useUserContext();
 
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -20,6 +22,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
     price: "",
     category: "",
     visibility: "public",
+    userEmail: currentUser ? currentUser.email : "", // Add userEmail to state
   });
 
   const [errors, setErrors] = useState({
@@ -46,7 +49,14 @@ export const CreateProductModal = ({ open, handleClose }) => {
   const handleCreateNewProduct = async () => {
     try {
       await validationSchema.validate(newProduct, { abortEarly: false });
-      await CREATE_PRODUCT(newProduct);
+
+      // Assuming you have currentUser.email available
+      const updatedProduct = {
+        ...newProduct,
+        userEmail: currentUser ? currentUser.email : "",
+      };
+
+      await CREATE_PRODUCT(updatedProduct);
 
       setNewProduct({
         name: "",
@@ -54,6 +64,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
         price: "",
         category: "",
         visibility: "public",
+        userEmail: currentUser ? currentUser.email : "",
       });
       handleClose();
     } catch (error) {
@@ -132,6 +143,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
             <MenuItem value="public">Public</MenuItem>
             <MenuItem value="private">Private</MenuItem>
           </Select>
+
           <Button
             variant="contained"
             color="primary"

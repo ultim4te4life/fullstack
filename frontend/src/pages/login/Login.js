@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Button, TextField, Typography, Container } from "@mui/material";
 import * as yup from "yup";
@@ -27,6 +27,7 @@ export const Login = () => {
   });
   const { signIn } = useUserContext();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
@@ -34,11 +35,11 @@ export const Login = () => {
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       const response = await axios.post(
-        "https://fullstack-backend-if5q.onrender.com/users/signin",
+        "http://localhost:8080/users/signin",
         data
       );
 
-      const user = response.data;
+      const user = await response.data;
 
       localStorage.setItem("user", JSON.stringify(user));
       signIn(data);
@@ -50,6 +51,7 @@ export const Login = () => {
       });
 
       reset();
+      navigate("/");
     } catch (error) {
       console.error("Login failed", error.response.data);
 
