@@ -39,6 +39,7 @@ const signUpUser = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
+    console.log({ firstname, lastname, email, age, password });
     const newUser = await User.create({
       firstname,
       lastname,
@@ -49,9 +50,16 @@ const signUpUser = async (req, res) => {
 
     const token = createToken(newUser._id);
 
-    res
-      .status(200)
-      .json({ user: { id: newUser._id, email: newUser.email }, token });
+    res.status(200).json({
+      user: {
+        id: newUser._id,
+        email: newUser.email,
+        firstname: newUser.firstname,
+        lastname: newUser.lastname,
+        age: newUser.age,
+      },
+      token,
+    });
   } catch (err) {
     res.status(500).send(err.message);
     return;

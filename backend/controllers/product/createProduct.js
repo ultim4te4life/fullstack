@@ -1,8 +1,8 @@
 const Product = require("../../models/product");
-const User = require("../../models/user"); // Import the User model
+const User = require("../../models/user");
 
 const createnewProduct = async (req, res) => {
-  const { name, price, description, category, visibility } = req.body;
+  const { name, price, description, category, visibility, imageUrl } = req.body;
   const userId = req.user._id;
   const userEmail = req.user.email;
 
@@ -13,7 +13,9 @@ const createnewProduct = async (req, res) => {
       !description ||
       !category ||
       !userId ||
-      !visibility
+      !visibility ||
+      !imageUrl ||
+      !userEmail
     ) {
       return res.status(400).json({
         message: "All fields, including visibility, are required",
@@ -39,6 +41,7 @@ const createnewProduct = async (req, res) => {
       userId,
       visibility,
       userEmail,
+      imageUrl,
     });
 
     res.status(201).json(product);

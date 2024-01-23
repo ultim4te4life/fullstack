@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Button, TextField, Typography, Container } from "@mui/material";
 import * as yup from "yup";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ClipLoader } from "react-spinners";
 import { useUserContext } from "../../context/UserContext";
+import { useTheme } from "../../context/ThemeContext"; // Import the useTheme hook
 
 const schema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -17,6 +18,11 @@ const schema = yup.object().shape({
 });
 
 export const Login = () => {
+  const { isDarkTheme } = useTheme(); // Use the useTheme hook to get the theme
+  useEffect(() => {
+    document.body.classList.toggle("dark", isDarkTheme);
+    document.body.classList.toggle("light", !isDarkTheme);
+  }, [isDarkTheme]);
   const {
     register,
     handleSubmit,
@@ -64,7 +70,9 @@ export const Login = () => {
   };
 
   return (
-    <div>
+    <div className={isDarkTheme ? "dark" : "light"}>
+      {" "}
+      {/* Apply the theme class to the container */}
       <Header />
       <Container component="main" maxWidth="xs">
         <div>

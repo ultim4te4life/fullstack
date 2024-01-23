@@ -20,7 +20,6 @@
 
 .site-title {
   font-size: 24px;
-  color: #fff;
   font-weight: bold;
 }
 
@@ -31,15 +30,14 @@
 
 .nav-link {
   text-decoration: none;
-  color: #fff;
   margin: 0 20px;
   font-size: 16px;
   font-weight: 500;
   transition: color 0.3s ease-in-out;
+  color: #ccc;
 }
 
 .nav-link:hover {
-  color: #19149e;
 }
 
 .user-info {
@@ -49,13 +47,11 @@
 
 .welcome-text {
   margin-right: 20px;
-  color: #fff;
   font-size: 16px;
 }
 
 .sign-out-button {
   background-color: #fff;
-  color: #2196f3;
   border: none;
   border-radius: 5px;
   padding: 8px 16px;
@@ -66,7 +62,6 @@
 
 .sign-out-button:hover {
   background-color: #1976d2;
-  color: #fff;
 }
 
 .auth-links {
@@ -75,11 +70,71 @@
 }
 
 .auth-links .nav-link {
-  color: #fff;
   font-size: 16px;
   font-weight: 500;
 }
 
 .auth-links .nav-link:hover {
   color: #ffeb3b;
+}
+
+.header.dark {
+  background-color: #333; /* Dark theme background color */
+  color: #fff; /* Dark theme text color */
+}
+
+.header.light {
+  background-color: #fff; /* Light theme background color */
+  color: #333; /* Light theme text color */
+}
+
+.theme-toggle {
+  margin-left: auto; /* Move the toggle to the right */
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2196f3; /* Toggle color when switched on */
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
 }

@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from "react";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import * as yup from "yup";
+import { Modal } from "../../components";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Select,
+  MenuItem,
+} from "@mui/material";
+import * as Yup from "yup";
 import { useProductContext } from "../../context/ProductContext";
 
-const validationSchema = yup.object().shape({
-  name: yup.string().required("Name is required"),
-  description: yup.string().required("Description is required"),
-  price: yup
-    .number()
-    .required("Price is required")
-    .positive("Price must be a positive number"),
-  category: yup.string().required("Category is required"),
-  visibility: yup.string().required("Visibility is required"),
+import { uploadImage } from "../../utils";
+
+const validationSchema = Yup.object({
+  name: Yup.string().required("Name is required"),
+  description: Yup.string().required("Description is required"),
+  price: Yup.number().required("Price is required"),
+  category: Yup.string().required("Category is required"),
+  visibility: Yup.string().required("Visibility is required"),
+  imageUrl: Yup.string()
+    .url("Invalid URL format")
+    .required("Image URL is required"),
 });
 
-export const EditProductModal = ({ open, handleClose, product, id }) => {
+export const EditProductModal = ({ open, handleClose, product }) => {
   const { UPDATE_PRODUCT } = useProductContext();
 
+  const [file, setFile] = useState();
   const [editedProduct, setEditedProduct] = useState({
     name: product.name,
     description: product.description,
     price: product.price,
     category: product.category,
-    visibility: product.visibility,
+    visibility: product.visibility || "public",
+    imageUrl: product.imageUrl,
   });
 
   const [errors, setErrors] = useState({
@@ -36,39 +43,55 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
     price: "",
     category: "",
     visibility: "",
+    imageUrl: "",
   });
 
   useEffect(() => {
-    setEditedProduct({
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      category: product.category,
-      visibility: product.visibility,
-    });
+    if (product) {
+      setEditedProduct({
+        name: product.name || "",
+        description: product.description || "",
+        price: product.price || 0,
+        category: product.category || "",
+        visibility: product.visibility || "public",
+        imageUrl: product.imageUrl || "",
+      });
+    }
   }, [product]);
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
+  const handleInputChange = (field, value) => {
     setEditedProduct((prevProduct) => ({
       ...prevProduct,
-      [name]: value,
+      [field]: value,
     }));
+  };
+
+  const handleImageChange = (event) => {
+    setFile(event.target.files[0]);
   };
 
   const handleEditProduct = async () => {
     try {
+      const imageUrl = await uploadImage(file);
       await validationSchema.validate(editedProduct, { abortEarly: false });
-      await UPDATE_PRODUCT({ ...editedProduct, _id: id });
+      await UPDATE_PRODUCT({
+        ...editedProduct,
+        _id: product._id,
+        imageUrl: imageUrl,
+      });
+
       console.log("Product updated successfully!");
       handleClose();
     } catch (error) {
-      if (error.name === "ValidationError") {
+      if (error instanceof Yup.ValidationError) {
         const newErrors = {};
         error.inner.forEach((validationError) => {
-          newErrors[validationError.path] = validationError.message;
+          const path = validationError.path || "unknown";
+          newErrors[path] = validationError.message;
         });
         setErrors(newErrors);
+      } else if (error.name === "AbortError") {
+        console.error("Image upload aborted:", error.message);
       } else {
         console.error("Error updating product:", error.message);
       }
@@ -77,17 +100,16 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box sx={{ ...modalStyle, width: 400 }}>
-        <h2>Edit Product</h2>
+      <Box>
+        <Typography variant="h6">Edit Product</Typography>
         <form>
           <TextField
             label="Name"
             variant="outlined"
             margin="normal"
             fullWidth
-            name="name"
             value={editedProduct.name}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("name", e.target.value)}
             error={!!errors.name}
             helperText={errors.name}
           />
@@ -96,11 +118,10 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
             variant="outlined"
             margin="normal"
             fullWidth
-            name="description"
-            value={editedProduct.description}
-            onChange={handleInputChange}
             multiline
             rows={4}
+            value={editedProduct.description}
+            onChange={(e) => handleInputChange("description", e.target.value)}
             error={!!errors.description}
             helperText={errors.description}
           />
@@ -109,9 +130,9 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
             variant="outlined"
             margin="normal"
             fullWidth
-            name="price"
+            type="number"
             value={editedProduct.price}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("price", e.target.value)}
             error={!!errors.price}
             helperText={errors.price}
           />
@@ -120,24 +141,23 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
             variant="outlined"
             margin="normal"
             fullWidth
-            name="category"
             value={editedProduct.category}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("category", e.target.value)}
             error={!!errors.category}
             helperText={errors.category}
           />
+          <input type="file" onChange={handleImageChange} />
           <Select
             label="Visibility"
             variant="outlined"
             margin="normal"
-            fullWidth
-            name="visibility"
             value={editedProduct.visibility}
-            onChange={handleInputChange}
+            onChange={(e) => handleInputChange("visibility", e.target.value)}
           >
             <MenuItem value="public">Public</MenuItem>
             <MenuItem value="private">Private</MenuItem>
           </Select>
+
           <Button
             variant="contained"
             color="primary"
@@ -153,15 +173,4 @@ export const EditProductModal = ({ open, handleClose, product, id }) => {
       </Box>
     </Modal>
   );
-};
-
-const modalStyle = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  padding: "20px",
-  backgroundColor: "white",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
-  borderRadius: "8px",
 };

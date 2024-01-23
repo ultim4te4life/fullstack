@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Button, TextField, Typography, Container, Grid } from "@mui/material";
@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { css } from "@emotion/react";
 import { ClipLoader } from "react-spinners";
 import { useUserContext } from "../../context/UserContext";
+import { useTheme } from "../../context/ThemeContext";
 
 const schema = yup.object().shape({
   firstName: yup.string().required("First Name is required"),
@@ -46,6 +47,12 @@ const SignUpPage = () => {
   });
   const { signUp } = useUserContext();
   const [loading, setLoading] = useState(false);
+  const { isDarkTheme } = useTheme();
+
+  useEffect(() => {
+    document.body.classList.toggle("dark", isDarkTheme);
+    document.body.classList.toggle("light", !isDarkTheme);
+  }, [isDarkTheme]);
 
   const onSubmit = async (data) => {
     console.log(data);
@@ -81,7 +88,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div>
+    <div className={isDarkTheme ? "dark" : "light"}>
       <Header />
       <Container component="main" maxWidth="xs" className="container">
         <div>
@@ -96,6 +103,14 @@ const SignUpPage = () => {
                   label="First Name"
                   variant="outlined"
                   fullWidth
+                  className={`input-field ${
+                    isDarkTheme ? "dark-text" : "light-text"
+                  }`}
+                  InputProps={{
+                    style: {
+                      color: isDarkTheme ? "#fff" : "#000",
+                    },
+                  }}
                   error={!!errors.firstName}
                   helperText={errors.firstName?.message}
                 />

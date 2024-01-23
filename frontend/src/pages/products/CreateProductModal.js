@@ -10,19 +10,18 @@ import {
 } from "@mui/material";
 import * as Yup from "yup";
 import { useProductContext } from "../../context/ProductContext";
-import { useUserContext } from "../../context/UserContext";
+import { uploadImage } from "../../utils";
 
 export const CreateProductModal = ({ open, handleClose }) => {
   const { CREATE_PRODUCT } = useProductContext();
-  const { currentUser } = useUserContext();
-
+  const [file, setFile] = useState();
   const [newProduct, setNewProduct] = useState({
     name: "",
     description: "",
     price: "",
     category: "",
     visibility: "public",
-    userEmail: currentUser ? currentUser.email : "", // Add userEmail to state
+    imageUrl: "",
   });
 
   const [errors, setErrors] = useState({
@@ -46,16 +45,21 @@ export const CreateProductModal = ({ open, handleClose }) => {
     }));
   };
 
+  const handleImageChange = (event) => {
+    setFile(event.target.files[0]);
+  };
+
   const handleCreateNewProduct = async () => {
     try {
       await validationSchema.validate(newProduct, { abortEarly: false });
 
-      // Assuming you have currentUser.email available
+      const imageUrl = await uploadImage(file);
+      console.log(imageUrl);
       const updatedProduct = {
         ...newProduct,
-        userEmail: currentUser ? currentUser.email : "",
+        imageUrl: imageUrl,
+        price: parseInt(newProduct.price),
       };
-
       await CREATE_PRODUCT(updatedProduct);
 
       setNewProduct({
@@ -64,18 +68,23 @@ export const CreateProductModal = ({ open, handleClose }) => {
         price: "",
         category: "",
         visibility: "public",
-        userEmail: currentUser ? currentUser.email : "",
+        imageUrl: "",
       });
+      setFile();
       handleClose();
     } catch (error) {
+      console.error(error);
       if (error instanceof Yup.ValidationError) {
         const newErrors = {};
         error.inner.forEach((validationError) => {
-          newErrors[validationError.path] = validationError.message;
+          const path = validationError.path || "unknown";
+          newErrors[path] = validationError.message;
         });
         setErrors(newErrors);
+      } else if (error.name === "AbortError") {
+        console.error("Image upload aborted:", error.message);
       } else {
-        console.error("Error creating product:", error);
+        console.error("Error creating product:", error.message);
       }
     }
   };
@@ -133,6 +142,7 @@ export const CreateProductModal = ({ open, handleClose }) => {
             error={!!errors.category}
             helperText={errors.category}
           />
+          <input type="file" onChange={handleImageChange} />
           <Select
             label="Visibility"
             variant="outlined"

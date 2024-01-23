@@ -31,6 +31,9 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "User email is required"],
     },
+    imageUrl: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

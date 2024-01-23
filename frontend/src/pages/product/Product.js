@@ -1,4 +1,5 @@
 // Product.js
+
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { EditProductModal } from "./EditProductModal";
@@ -6,42 +7,49 @@ import { Header } from "../../components";
 import "./Product.css";
 import { DeleteProductModal } from "./DeleteProductModal";
 import { useProductContext } from "../../context/ProductContext";
+import { useTheme } from "../../context/ThemeContext";
 
 export const Product = () => {
   const { id } = useParams();
-  const { products, productsContextLoading, fetchProducts } =
-    useProductContext();
-  const [product, setProduct] = useState({});
+  const { products, productsContextLoading } = useProductContext();
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const { isDarkTheme } = useTheme();
 
   useEffect(() => {
-    if (!productsContextLoading && products.length === 0) {
-      fetchProducts();
-    } else {
-      const foundProduct = products.find((p) => p._id === id);
-      if (foundProduct) {
-        setProduct(foundProduct);
-      }
-    }
-  }, [id, products, productsContextLoading, fetchProducts]);
+    document.body.classList.toggle("dark", isDarkTheme);
+    document.body.classList.toggle("light", !isDarkTheme);
+  }, [isDarkTheme]);
 
-  const handleOpenEdit = () => setOpenEdit(true);
+  const handleOpenEdit = async () => {
+    setOpenEdit(true);
+  };
+
   const handleCloseEdit = () => setOpenEdit(false);
 
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
+
+  const product = products.find((product) => product._id === id);
 
   if (productsContextLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <div className={isDarkTheme ? "dark" : "light"}>
       <Header />
 
       <div className="container">
         <div className="product-details">
+          {/* Render product image here */}
+          {product.imageUrl && (
+            <img
+              src={`${product.imageUrl}?${new Date().getTime()}`}
+              alt={`Product: ${product.name}`}
+              className="product-image-one"
+            />
+          )}
           <h2 className="heading">Product Details</h2>
           <p className="detail">Name: {product.name}</p>
           <p className="detail">Description: {product.description}</p>
@@ -59,7 +67,7 @@ export const Product = () => {
           >
             Visibility: {product.visibility}
           </p>
-          <p classname="detail">Added By: {product.userEmail}</p>{" "}
+          <p className="detail">Added By: {product.userEmail}</p>{" "}
           {/* Add this line */}
           <button className="action-button" onClick={handleOpenEdit}>
             Edit Product

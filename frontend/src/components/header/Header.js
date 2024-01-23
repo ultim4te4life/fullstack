@@ -1,13 +1,14 @@
-// Header.js
 import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Header.css";
 import { useUserContext } from "../../context/UserContext";
 import { useProductContext } from "../../context/ProductContext";
+import { useTheme } from "../../context/ThemeContext";
 
 export const Header = () => {
   const { currentUser, signOut, userContextLoading } = useUserContext();
   const { setProducts } = useProductContext();
+  const { isDarkTheme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     signOut();
@@ -19,12 +20,15 @@ export const Header = () => {
   }
 
   return (
-    <header className="header">
+    <header className={`header ${isDarkTheme ? "dark" : "light"}`}>
       <div className="logo">
-        <img
-          src="https://media1.giphy.com/media/IxKAzrKSGdOxGi4dlj/giphy.gif?cid=ecf05e479et91ishqeeiubgf5khgzfd8a3xcyivz6033d9dl&ep=v1_gifs_related&rid=giphy.gif&ct=g"
-          alt="Your Logo"
-        />
+        <img alt="Your Logo" />
+      </div>
+      <div className="theme-toggle">
+        <label className="switch">
+          <input type="checkbox" onChange={toggleTheme} checked={isDarkTheme} />
+          <span className="slider round"></span>
+        </label>
       </div>
       <nav className="nav">
         <NavLink to="/" className="nav-link" activeClassName="active" exact>
@@ -35,10 +39,13 @@ export const Header = () => {
         </NavLink>
         {currentUser ? (
           <div className="user-info">
-            <span className="welcome-text">
-              Welcome,{" "}
-              {currentUser.user ? currentUser.user.email : currentUser.email}
-            </span>
+            {/* Wrap the email with NavLink */}
+            <NavLink to="/profile" className="user-email-link">
+              <span className="welcome-text">
+                Welcome,{" "}
+                {currentUser.user ? currentUser.user.email : currentUser.email}
+              </span>
+            </NavLink>
             <button className="sign-out-button" onClick={handleLogout}>
               Sign Out
             </button>

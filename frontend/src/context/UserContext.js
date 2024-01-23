@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import axios from "axios";
 
 export const UserContext = createContext();
 
@@ -34,9 +35,42 @@ export const UserContextProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
+  const CHANGE_PROFILE = async (updatedProfile) => {
+    try {
+      if (!currentUser) {
+        console.error("User not authenticated. Unable to change profile.");
+        return;
+      }
+
+      const response = await axios.put(
+        "http://localhost:8080/account/changeProfile",
+        updatedProfile,
+        {
+          headers: {
+            Authorization: `Bearer ${currentUser.token}`,
+          },
+        }
+      );
+
+      const updatedProfileData = response.data;
+      localStorage.setItem("user", JSON.stringify(updatedProfileData));
+      console.log(updatedProfileData);
+      setCurrentUser(JSON.parse(updatedProfileData));
+    } catch (error) {
+      console.log("Error changing profile:", error);
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ currentUser, signUp, signIn, signOut, userContextLoading }}
+      value={{
+        currentUser,
+        signUp,
+        signIn,
+        signOut,
+        userContextLoading,
+        CHANGE_PROFILE,
+      }}
     >
       {children}
     </UserContext.Provider>

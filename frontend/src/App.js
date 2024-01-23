@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Home, Product, Products, Login } from "./pages";
+import { Home, Product, Products, Login, Profile } from "./pages";
 import SignUpPage from "./pages/signup/SignUp";
 import { useUserContext } from "./context/UserContext";
 
@@ -15,6 +15,7 @@ export const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
 
         <Route
           path="/products"

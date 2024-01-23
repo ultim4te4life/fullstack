@@ -19,7 +19,7 @@ require("dotenv").config();
 const usersRoutes = require("./routes/users");
 const productsRoutes = require("./routes/products");
 const notesRoutes = require("./routes/notes");
-
+const accountsRoutes = require("./routes/accounts");
 const port = process.env.PORT || 3000;
 // middleware ---> logging
 
@@ -37,6 +37,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/users", usersRoutes);
+
+app.use("/account", accountsRoutes);
 
 app.use("/products", productsRoutes);
 

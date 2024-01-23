@@ -1,5 +1,5 @@
 // Products.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Products.css";
 
 import { Header } from "../../components";
@@ -8,6 +8,7 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { CreateProductModal } from "./CreateProductModal";
 import { useProductContext } from "../../context/ProductContext";
+import { useTheme } from "../../context/ThemeContext";
 
 export const Products = () => {
   const navigate = useNavigate();
@@ -16,20 +17,22 @@ export const Products = () => {
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { isDarkTheme } = useTheme();
+
+  useEffect(() => {
+    document.body.classList.toggle("dark", isDarkTheme);
+    document.body.classList.toggle("light", !isDarkTheme);
+  }, [isDarkTheme]);
 
   if (productsContextLoading) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
+    <div className={isDarkTheme ? "dark" : "light"}>
       <Header />
       <div className="products-header">
-        <Button
-          className="button-styled"
-          variant="outlined"
-          onClick={handleOpen}
-        >
+        <Button className="button" variant="outlined" onClick={handleOpen}>
           Create Product
         </Button>
       </div>
@@ -41,7 +44,14 @@ export const Products = () => {
               className="product-card"
               onClick={() => navigate(`/products/${product._id}`)}
             >
-              <h3>Name: {product.name}</h3>
+              {product.imageUrl && (
+                <img
+                  src={product.imageUrl}
+                  alt={`Product: ${product.name}`}
+                  className="product-image"
+                />
+              )}
+              <h3 className="heading">Name: {product.name}</h3>
               <p>Description: {product.description}</p>
               <p>Price: ${product.price}</p>
               <p>Category: {product.category}</p>
@@ -56,7 +66,7 @@ export const Products = () => {
               >
                 Visibility: {product.visibility}
               </p>
-              <p>Added By: {product.userEmail}</p> {/* Add this line */}
+              <p>Added By: {product.userEmail}</p>
             </div>
           ))}
       </div>
